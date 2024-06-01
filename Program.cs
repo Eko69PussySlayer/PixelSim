@@ -1,4 +1,5 @@
-﻿namespace PixelSim
+﻿using Raylib_cs;
+namespace PixelSim
 {
 
     class Program
@@ -9,7 +10,7 @@
             Canvas canvas = new Canvas();
 
             canvas.InitializeDrawing();
-
+          
     
 
         }
