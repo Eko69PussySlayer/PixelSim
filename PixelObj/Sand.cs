@@ -1,66 +1,51 @@
-
-using System.Transactions;
-using OpenTK.Mathematics;
+using Microsoft.VisualBasic;
 using Raylib_cs;
+using System.Numerics;
+using Vector2 = System.Numerics.Vector2;
+using System.Collections.Generic;
+using System;
 
-
-namespace PixelObj
+namespace PixelSim
 {
-    public class Sand : Base
+    public class Sand
     {
-
-
-        public new int x;
-        public new int y;
-
-        public float gravity = -9.8f;
-
-        public Sand(int x, int y) : base()
+        public CellType[,] NextSand(CellType[,] grid, int cols, int rows, CellType[,] nextGrid)
         {
-            this.x = x;
-            this.y = y;
+            if (grid == null || nextGrid == null)
+            {
+                throw new ArgumentException("Grid and nextGrid cannot be null");
+            }
 
-
+            for (int i = 0; i < cols; i++)
+            {
+                for (int j = 0; j < rows; j++)
+                {
+                    if (grid[i, j] == CellType.Sand)
+                    {
+                        if (j < rows - 1 && grid[i, j + 1] == CellType.Empty)
+                        {
+                            // Move down if possible
+                            nextGrid[i, j + 1] = CellType.Sand;
+                        }
+                        else if (i < cols - 1 && j < rows - 1 && grid[i + 1, j + 1] == CellType.Empty)
+                        {
+                            // Move down-right if possible
+                            nextGrid[i + 1, j + 1] = CellType.Sand;
+                        }
+                        else if (i > 0 && j < rows - 1 && grid[i - 1, j + 1] == CellType.Empty)
+                        {
+                            // Move down-left if possible
+                            nextGrid[i - 1, j + 1] = CellType.Sand;
+                        }
+                        else
+                        {
+                            // Stay in place if no movement is possible
+                            nextGrid[i, j] = CellType.Sand;
+                        }
+                    }
+                }
+            }
+            return nextGrid;
         }
-
-
-
-        public void Gravity()
-        {
-
-
-
-        }
-        public override void Spawn(Vector2i position, Array[,] matrix)
-        {
-            // Snap the sand to the grid
-            Vector2i snappedPosition = new Vector2i(position.X / 4, position.Y / 4);
-
-            // Draw the sand at the snapped position
-            Raylib_cs.Rectangle sandRec = new Raylib_cs.Rectangle(snappedPosition.X * 4, snappedPosition.Y * 4, 4, 4);
-            Raylib.DrawRectangleRec(sandRec, Color.Beige);
-
-            // Update the matrix at the snapped position
-           // Assuming you want to store the Sand object in the matrix
-
-
-
-
-
-
-
-
-
-        }
-
-
     }
-
-
-
-
-
 }
-
-
-
